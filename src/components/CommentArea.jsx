@@ -41,8 +41,8 @@ const CommentArea = (props) => {
           </div>
         ) : (
           <div>
-            <CommentsList commentsList={commentsList}></CommentsList>
-            <AddComment bookId={props.id}></AddComment>
+            <CommentsList commentsList={commentsList} setCommentList={setCommentList}></CommentsList>
+            <AddComment bookId={props.id} commentsList={commentsList} setCommentList={setCommentList}></AddComment>
           </div>
         )
       ) : (

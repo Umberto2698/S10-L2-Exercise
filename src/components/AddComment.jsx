@@ -4,9 +4,9 @@ import { Form, Button } from "react-bootstrap";
 const AddComment = (props) => {
   const [form, setForm] = useState(null);
 
-  const sendComment = (e) => {
+  const sendComment = async (e) => {
     e.preventDefault();
-    fetch("https://striveschool-api.herokuapp.com/api/comments/", {
+    const commentObj = await fetch("https://striveschool-api.herokuapp.com/api/comments/", {
       method: "POST",
       headers: {
         Authorization:
@@ -19,6 +19,8 @@ const AddComment = (props) => {
         elementId: props.bookId,
       }),
     });
+    const comment = await commentObj.json();
+    props.setCommentList([...props.commentsList, comment]);
   };
 
   return (

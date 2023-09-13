@@ -1,39 +1,81 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import library from "../data/scifi.json";
+import fantasy from "../data/fantasy.json";
+import history from "../data/history.json";
+import horror from "../data/horror.json";
+import romance from "../data/romance.json";
+import scifi from "../data/scifi.json";
 import SingleBook from "./SingleBook";
 
 const BookList = (props) => {
-  const [title, setTitle] = useState(null);
-  const [searchedBook, setSearchedBook] = useState(library);
+  const [title, setTitle] = useState("");
+  const [searchedBook, setSearchedBook] = useState([]);
+  const [generes, setGeneres] = useState("all");
+  const library = fantasy.concat(history.concat(horror).concat(romance).concat(scifi));
 
-  const filterBookList = (e) => {
+  const filterBookList = (e, selectedGeneres) => {
     e.preventDefault();
-    if (title === "") {
+    if (title === "" && selectedGeneres === "all") {
+      console.log("primo");
       setSearchedBook(library);
-    } else {
+    } else if (selectedGeneres === "all") {
+      console.log("sec");
       setSearchedBook(library.filter((book) => book.title.toUpperCase().includes(title.toUpperCase())));
+    } else {
+      console.log("tre");
+      setSearchedBook(
+        library.filter((book) => {
+          return book.title.toUpperCase().includes(title.toUpperCase()) && book.category === selectedGeneres;
+        })
+      );
     }
   };
+
+  useEffect(() => {
+    setSearchedBook(library);
+  }, []);
 
   return (
     <main className="h-100">
       <div className="container">
         <div className="mb-5 px-4">
-          <Form onSubmit={filterBookList}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Titolo libro</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Inserisci il titolo di un libro"
-                onChange={(input) => {
-                  setTitle(input.target.value);
+          <Form
+            onSubmit={(e) => {
+              filterBookList(e, generes);
+            }}
+            className="d-flex align-items-center justify-content-center"
+          >
+            <div className="d-inline-block mx-3">
+              <Form.Group className="mx-2 d-inline-block" controlId="formBasicEmail">
+                <Form.Label>Book title</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Insert a book title"
+                  onChange={(input) => {
+                    setTitle(input.target.value);
+                  }}
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </div>
+            <Form.Group className="mx-3 d-inline-block">
+              <Form.Label>Generes</Form.Label>
+              <Form.Select
+                onChange={(e) => {
+                  setGeneres(e.target.value);
+                  filterBookList(e, e.target.value);
                 }}
-              />
+              >
+                <option value="all">All</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="history">History</option>
+                <option value="horror">Horror</option>
+                <option value="romance">Romance</option>
+                <option value="scifi">Scifi</option>
+              </Form.Select>
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
           </Form>
         </div>
         <div className="row d-flex align-items-center justify-content-between">

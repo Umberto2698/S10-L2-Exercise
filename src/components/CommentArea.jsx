@@ -35,18 +35,20 @@ const CommentArea = (props) => {
     <>
       {display ? (
         commentsList.length === 0 ? (
-          <div>
+          <div style={{ marginTop: "calc(72px + 3rem)" }}>
             <p> Currently there are no comments for this book, but you can add one!</p>
             <AddComment bookId={props.id}></AddComment>
           </div>
         ) : (
-          <div>
+          <div style={{ marginTop: "calc(72px + 3rem)" }}>
             <CommentsList commentsList={commentsList} setCommentList={setCommentList}></CommentsList>
             <AddComment bookId={props.id} commentsList={commentsList} setCommentList={setCommentList}></AddComment>
           </div>
         )
       ) : (
-        <p>Select a book to view its comments</p>
+        <div style={{ marginTop: "calc(72px + 3rem)" }}>
+          <p>Select a book to view its comments</p>
+        </div>
       )}
     </>
   );

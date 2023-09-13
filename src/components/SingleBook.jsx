@@ -13,6 +13,7 @@ const SingleBook = (props) => {
         <Card.Img
           onClick={() => {
             props.setSelectBookId(props.book.asin);
+            props.setCommentsDisplay(true);
           }}
           variant="top"
           src={props.book.img}

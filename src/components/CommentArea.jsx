@@ -33,7 +33,7 @@ const CommentArea = (props) => {
 
   return (
     <>
-      {display ? (
+      {display && props.commentsDisplay ? (
         commentsList.length === 0 ? (
           <div style={{ marginTop: "calc(72px + 3rem)" }}>
             <p> Currently there are no comments for this book, but you can add one!</p>

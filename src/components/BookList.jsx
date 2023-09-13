@@ -13,27 +13,64 @@ const BookList = (props) => {
   const [generes, setGeneres] = useState("all");
   const library = fantasy.concat(history.concat(horror).concat(romance).concat(scifi));
 
+  useEffect(() => {
+    if (generes !== "all" && title !== "") {
+      setSearchedBook(
+        library.filter(
+          (book) => book.category === generes && book.title.toUpperCase().includes(title.toLocaleUpperCase())
+        )
+      );
+      if (searchedBook.some((book) => book.asin === props.selectedBook)) {
+        props.setCommentsDisplay(true);
+      } else {
+        props.setCommentsDisplay(false);
+      }
+    } else if (generes === "all" && title !== "") {
+      setSearchedBook(library.filter((book) => book.title.toUpperCase().includes(title.toLocaleUpperCase())));
+      if (searchedBook.some((book) => book.asin === props.selectedBook)) {
+        props.setCommentsDisplay(true);
+      } else {
+        props.setCommentsDisplay(false);
+      }
+    } else if (generes !== "all" && title === "") {
+      setSearchedBook(library.filter((book) => book.category === generes));
+    } else {
+      setSearchedBook(library);
+    }
+  }, [generes]);
+
+  useEffect(() => {
+    if (searchedBook.some((book) => book.asin === props.selectedBook)) {
+      props.setCommentsDisplay(true);
+    } else {
+      props.setCommentsDisplay(false);
+    }
+  }, [searchedBook]);
+
   const filterBookList = (e, selectedGeneres) => {
     e.preventDefault();
     if (title === "" && selectedGeneres === "all") {
-      console.log("primo");
       setSearchedBook(library);
     } else if (selectedGeneres === "all") {
-      console.log("sec");
       setSearchedBook(library.filter((book) => book.title.toUpperCase().includes(title.toUpperCase())));
+      if (searchedBook.some((book) => book.asin === props.selectedBook)) {
+        props.setCommentsDisplay(true);
+      } else {
+        props.setCommentsDisplay(false);
+      }
     } else {
-      console.log("tre");
       setSearchedBook(
         library.filter((book) => {
           return book.title.toUpperCase().includes(title.toUpperCase()) && book.category === selectedGeneres;
         })
       );
+      if (searchedBook.some((book) => book.asin === props.selectedBook)) {
+        props.setCommentsDisplay(true);
+      } else {
+        props.setCommentsDisplay(false);
+      }
     }
   };
-
-  useEffect(() => {
-    setSearchedBook(library);
-  }, []);
 
   return (
     <main className="h-100">
@@ -65,7 +102,7 @@ const BookList = (props) => {
               <Form.Select
                 onChange={(e) => {
                   setGeneres(e.target.value);
-                  filterBookList(e, e.target.value);
+                  setTitle(e.target.form[0].value);
                 }}
               >
                 <option value="all">All</option>
@@ -85,6 +122,7 @@ const BookList = (props) => {
                 book={book}
                 setSelectBookId={props.setSelectBookId}
                 selectedBook={props.selectedBook}
+                setCommentsDisplay={props.setCommentsDisplay}
               ></SingleBook>
             </div>
           ))}

@@ -10,6 +10,7 @@ import { useState } from "react";
 
 const App = () => {
   const [selectedBookId, setSelectBookId] = useState("");
+  const [commentsDisplay, setCommentsDisplay] = useState(true);
 
   return (
     <div className="App">
@@ -18,10 +19,14 @@ const App = () => {
         <Welcome></Welcome>
         <Row className="mt-4">
           <Col md={8}>
-            <BookList setSelectBookId={setSelectBookId} selectedBook={selectedBookId}></BookList>
+            <BookList
+              setSelectBookId={setSelectBookId}
+              selectedBook={selectedBookId}
+              setCommentsDisplay={setCommentsDisplay}
+            ></BookList>
           </Col>
           <Col md={4}>
-            <CommentArea id={selectedBookId}></CommentArea>
+            <CommentArea id={selectedBookId} commentsDisplay={commentsDisplay}></CommentArea>
           </Col>
         </Row>
       </Container>
